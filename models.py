@@ -4,7 +4,7 @@ from flask_bcrypt import generate_password_hash
 
 import datetime
 
-DATABASE = SqliteDatabase('maestro')
+DATABASE = SqliteDatabase('maestro.db')
 
 class BaseModel(Model):
 
