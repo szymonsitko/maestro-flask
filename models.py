@@ -12,11 +12,11 @@ class BaseModel(Model):
         database = DATABASE
 
 class User(BaseModel, UserMixin):
-	username = CharField(max_length=120)
+	username = CharField(max_length=120, unique=True)
 	email = CharField(max_length=120)
 	password = CharField(max_length=120)
 	joined_at = DateTimeField()
-	id_admin = BooleanField()
+	id_admin = BooleanField(default=False)
 
 	@classmethod
 	def new_user(cls, username, email, password, joined_at=datetime.datetime.now(), is_admin=False):

@@ -2,12 +2,27 @@
 
 {% block content %}
 
+{% if register_form %}
 
+<form method="POST" action="" class="form">
+{% for object in register_form %} {{ register_form.csrf_token }}
+	
+ 	{{ object.label }}
+ 	<br>
+ 	{{ object }}
+ 	<br>
+{% endfor %}
+	<br>
+	<button type="submit" id="submit">Register!</button>
+</form>
 
+{% endif %}
 
+{% if error_msg %}
 
+{{ error_msg }}
 
-
+{% endif %}
 
 
 
