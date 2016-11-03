@@ -4,6 +4,19 @@ from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
 	Length)
 from wtforms import Form, BooleanField, StringField, PasswordField, FileField, validators
 from peewee import *
+import models
+
+
+def name_exists(form, field):
+    if models.User.select().where(models.User.username == field.data).exists():
+        raise ValidationError('User with that name already exists.')
+
+
+def email_exists(form, field):
+    if models.User.select().where(models.User.email == field.data).exists():
+        raise ValidationError('User with that email already exists.')
+
+
 
 class RegisterForm(Form):
 	username = StringField(
@@ -13,7 +26,8 @@ class RegisterForm(Form):
 			Regexp(
 				r'^[a-zA-Z0-9_]+$',
 				message=('Username should contin one word, letters, numbers, underscore or hyphen only!')
-		),
+			),
+			name_exists,
 			])
 	
 	email = StringField(
@@ -21,6 +35,7 @@ class RegisterForm(Form):
 		validators=[
 			DataRequired(),
 			Email(),
+			email_exists,
 			])	
 
 	password = PasswordField(
@@ -31,7 +46,7 @@ class RegisterForm(Form):
 		])
 
 class LoginForm(Form):
-	email = StringField('email', validators=[DataRequired(), Email()])
+	email = StringField('Email', validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
 
 class CreateAlbum(Form):

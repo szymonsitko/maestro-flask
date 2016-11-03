@@ -22,6 +22,12 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+@login_manager.user_loader
+def user_loader(userid):
+	try:
+		return models.User.get(models.User.id == userid)
+	except models.DoesNotExist:
+		return None
 
 @app.route('/create_album/', methods=['GET', 'POST'])
 def create_album():
@@ -45,14 +51,41 @@ def create_album():
 
 
 
+def login_helper(email, password):
+	try:
+		user = models.User.get(models.User.email == email)
+		print(user.password)
+		if check_password_hash(user.password, password):
+			return user
+		else:
+			return False
+	except:
+		return False
 
 
 
-
-
-@app.route('/login/')
+@app.route('/login/', methods=['GET','POST'])
 def login():
-	return render_template('login.html')
+	login_form = LoginForm(request.form)
+	if request.method == 'POST':
+		if login_form.validate():
+			email = request.form['email']
+			password = request.form['password']
+			user_login = login_helper(email, password)
+			print(user_login)
+			if user_login:
+				login_user(user_login)
+				return redirect(url_for('create_album'))
+			else:
+				return render_template('login.html',
+					login_form=login_form,
+					error_msg="Cannot authorise user. Try again!")
+		else:
+			return render_template('login.html', 
+				login_form=login_form,
+				error_msg="Incorrect data given, please try again!")
+	else:
+		return render_template('login.html', login_form=login_form)
 
 def register_validator(user_name):
 	if user_name in models.User.select():

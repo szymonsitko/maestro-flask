@@ -14,7 +14,7 @@ class BaseModel(Model):
 class User(BaseModel, UserMixin):
 	username = CharField(max_length=120, unique=True)
 	email = CharField(max_length=120)
-	password = CharField(max_length=120)
+	password = CharField(max_length=200)
 	joined_at = DateTimeField()
 	id_admin = BooleanField(default=False)
 
@@ -23,7 +23,7 @@ class User(BaseModel, UserMixin):
 		cls.create(
 			username=username,
 			email=email,
-			password=generate_password_hash(password),
+			password=password,
 			joined_at=joined_at,
 			is_admin=is_admin
 				)

@@ -16,7 +16,23 @@
 	<button type="submit" id="submit">Register!</button>
 </form>
 
+{% elif login_form %}
+
+<form method="POST" action="" class="form">
+{% for object in login_form %} {{ login_form.csrf_token }}
+	
+ 	{{ object.label }}
+ 	<br>
+ 	{{ object }}
+ 	<br>
+{% endfor %}
+	<br>
+	<button type="submit" id="submit">Login</button>
+</form>
+
 {% endif %}
+
+
 
 {% if error_msg %}
 

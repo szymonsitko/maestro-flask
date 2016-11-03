@@ -3,17 +3,7 @@
 {% block content %}
 
 
-<form method="POST" action="" class="form">
-{% for object in form %} {{ form.csrf_token }}
-	
- 	{{ object.label }}
- 	<br>
- 	{{ object }}
- 	<br>
-{% endfor %}
-	<br>
-	<button type="submit" id="submit">Register!</button>
-</form>
+
 
 
 
