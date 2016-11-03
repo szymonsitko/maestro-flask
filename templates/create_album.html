@@ -4,7 +4,18 @@
 
 
 
-
+<form method="POST" action="" class="form" enctype = "multipart/form-data">
+{% for object in add_album_form %} {{ add_album_form.csrf_token }}
+	
+ 	{{ object.label }}
+ 	<br>
+ 	{{ object }}
+ 	<br>
+{% endfor %}
+	<input type = "file" name = "file" />
+	<br>
+	<button type="submit" id="submit">Add!</button>
+</form>
 
 
 

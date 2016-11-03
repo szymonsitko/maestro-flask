@@ -53,5 +53,4 @@ class CreateAlbum(Form):
 	artist = StringField('Artist',validators=[DataRequired()])
 	album_title = StringField('Album title',validators=[DataRequired()])
 	genre = StringField('Genre',validators=[DataRequired()])
-	album_logo = StringField('Logo', validators=[DataRequired()])
 

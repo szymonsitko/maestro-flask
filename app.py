@@ -2,11 +2,14 @@ from flask import Flask, render_template, g, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import check_password_hash, generate_password_hash
 from forms import RegisterForm, LoginForm, CreateAlbum
+from werkzeug import secure_filename
 
 import models
+import os
 
 app = Flask(__name__)
 app.secret_key = '2sadxaaa4sakcSD'
+app.config['UPLOAD_FOLDER'] = 'home/Documents/programming/python/flask/maestro/media'
 
 @app.before_request
 def before_request():
@@ -39,17 +42,34 @@ def create_album():
 
 	'''
 
-	# if not current_user.is_authenticated:
-	# 	return redirect(url_for('login'))
-	# else:
-
-
+	if not current_user.is_authenticated:
+		return redirect(url_for('login'))
+	
+	else:
+		add_album_form = CreateAlbum(request.form)
+		if add_album_form.validate():
+			f = request.files['file']
+			f.save(secure_filename(f.filename))
+			file_name = secure_filename(f.filename)
+			print(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+			models.Album.new_album(
+				user=current_user.id, 
+				artist=request.form['artist'], 
+				album_title=request.form['album_title'], 
+				genre=request.form['genre'],
+				album_logo=os.path.join(app.config['UPLOAD_FOLDER'], file_name) 
+				)
+			return redirect(url_for('my_profile'))
+		else:
+			return render_template('create_album.html', 
+				add_album_form=add_album_form,
+				error_msg="Cannot upload the file. Please check allowed extensions!")
 
 	return render_template('create_album.html')
 
-
-
-
+@app.route
+def my_profile():
+	return render_template('my_profile.html')
 
 def login_helper(email, password):
 	try:
@@ -116,7 +136,8 @@ def register():
 
 @app.route('/logout/')
 def logout():
-	return ('Logged out')
+	logout_user()
+	return redirect(url_for('create_album'))
 
 
 if __name__ == "__main__":
