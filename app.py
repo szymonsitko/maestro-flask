@@ -55,7 +55,8 @@ def create_album():
 			models.Album.new_album(
 				user=current_user.id, 
 				artist=request.form['artist'], 
-				album_title=request.form['album_title'], 
+				album_title=request.form['album_title'],
+				release_date=release_date, 
 				genre=request.form['genre'],
 				album_logo=os.path.join(app.config['UPLOAD_FOLDER'], file_name) 
 				)
@@ -64,8 +65,12 @@ def create_album():
 			return render_template('create_album.html', 
 				add_album_form=add_album_form,
 				error_msg="Cannot upload the file. Please check allowed extensions!")
-
 	return render_template('create_album.html')
+
+
+@app.route('/create_song/')
+def create_song():
+	pass
 
 @app.route('/my_profile/')
 def my_profile():
@@ -74,14 +79,12 @@ def my_profile():
 def login_helper(email, password):
 	try:
 		user = models.User.get(models.User.email == email)
-		print(user.password)
 		if check_password_hash(user.password, password):
 			return user
 		else:
 			return False
 	except:
 		return False
-
 
 
 @app.route('/login/', methods=['GET','POST'])
@@ -92,7 +95,6 @@ def login():
 			email = request.form['email']
 			password = request.form['password']
 			user_login = login_helper(email, password)
-			print(user_login)
 			if user_login:
 				login_user(user_login)
 				return redirect(url_for('create_album'))

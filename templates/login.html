@@ -4,6 +4,8 @@
 
 {% if register_form %}
 
+<h2>Please register</h2>
+
 <form method="POST" action="" class="form">
 {% for object in register_form %} {{ register_form.csrf_token }}
 	
@@ -17,6 +19,8 @@
 </form>
 
 {% elif login_form %}
+
+<h2>Please login</h2>
 
 <form method="POST" action="" class="form">
 {% for object in login_form %} {{ login_form.csrf_token }}

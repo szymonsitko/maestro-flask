@@ -34,16 +34,18 @@ class Album(BaseModel):
 	album_title = CharField(max_length=500)
 	genre = CharField(max_length=100)
 	album_logo = CharField()
+	release_date = DecimalField()
 	is_favorite = BooleanField()
 
 	@classmethod
-	def new_album(cls, user, artist, album_title, genre, album_logo, is_favorite=False):
+	def new_album(cls, user, artist, album_title, genre, album_logo, release_date, is_favorite=False):
 		cls.create(
 			user=user,
 			artist=artist,
 			album_title=album_title,
 			genre=genre,
 			album_logo=album_logo,
+			release_date=release_date,
 			is_favorite=is_favorite
 				)
 
@@ -51,14 +53,16 @@ class Song(BaseModel):
     album = ForeignKeyField(Album, related_name='songs')
     song_title = CharField(max_length=250)
     audio_file = CharField(default='')
+    length = CharField(max_length=10)
     is_favorite = BooleanField()
 
     @classmethod
-    def new_song(cls, album, song_title, audio_file, is_favorite):
+    def new_song(cls, album, song_title, audio_file, length, is_favorite):
     	cls.create(
     		album=album,
     		song_title=song_title,
     		audio_file=audio_file,
+    		length=length,
     		is_favorite=False
     		)
 
