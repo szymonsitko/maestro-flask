@@ -9,34 +9,48 @@ import os
 
 app = Flask(__name__)
 app.secret_key = '2sadxaaa4sakcSD'
+
+# configuration for different files to upload: image files (media dir) and songs (media/songs)
 app.config['UPLOAD_PICTURES_FOLDER'] = '/home/simon/Documents/programming/python/flask/maestro/media'
 app.config['UPLOAD_SONGS_FOLDER'] = app.config['UPLOAD_PICTURES_FOLDER'] + '/songs/'
 
+# lists with allowed extensions to upload (for function "allowed_files_extensions()")
 song_extensions = ['mp3', 'wav', 'oog']
 images_extensions = ['jpg', 'jpeg', 'gif', 'png']
 
+
 @app.before_request
 def before_request():
+	# opens connection with database
 	g.db = models.DATABASE
 	g.db.connect()
 
+
 @app.after_request
 def after_request(response):
+	# closes connections with database
 	g.db.close()
 	return response
 
+# standard requirement for flask_login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
 @login_manager.user_loader
 def user_loader(userid):
+	# user_loader has to be configurated in order to help login manager to log user
 	try:
 		return models.User.get(models.User.id == userid)
 	except models.DoesNotExist:
 		return None
 
+
 def allowed_files_extensions(filename, extensions):
+	''' function-helper that validates input from file upload fields.
+	Requires two parameters: secure filename (look: werzkeug docs) and list of
+	extensions provided (above in this case) '''
 
 	file = filename.split('.')
 	if file[1] not in extensions:
@@ -51,7 +65,9 @@ def create_album():
 	''' Create album function allows user to add an album with photo (mandatory,
 	since all albums have some covers). Data is validated by CreateAlbum form.
 
-	BASE: if / else statements 
+	BASE: if / else statements, exceptions are handled by rendering error_msg to 
+	the template, so user can see what excatly went wrong withoud needing any further 
+	help (reading, FAQ's etc.)
 
 	'''
 
@@ -89,6 +105,10 @@ def create_album():
 @app.route('/create_song/<int:album_id>', methods=['GET', 'POST'])
 def create_song(album_id):
 
+	''' function structure is very similar to the create_album function view. 
+	Represents the same base, just parameters passed are different. Same BASE.
+	'''
+
 	if not current_user.is_authenticated:
 		return redirect(url_for('login'))
 
@@ -116,11 +136,41 @@ def create_song(album_id):
 					error_msg="Form was not filled correctly. Try again please.")
 		return render_template('create.html', form=add_song_form)
 
+
+@app.route('/delete_album/<int:album_id>')
+def delete_album(album_id):
+	''' simple delete view, that comes with a int variable required to match query '''
+
+	delete_album = models.Album.delete().where(models.Album.id == album_id)
+	delete_album.execute()
+	return redirect(url_for('my_profile'))
+
+@app.route('/delete_song/<int:song_id>')
+def delete_song(song_id):
+	''' as above '''
+	
+	delete_song = models.Song.delete().where(models.Song.id == song_id)
+	delete_song.execute()
+	return redirect(url_for('my_profile'))
+
 @app.route('/my_profile/')
 def my_profile():
 	return render_template('my_profile.html')
 
 def login_helper(email, password):
+
+	''' in order to clean code and avoid confusion, login helper checks whether:
+	1. user exists in the system already 
+	2. if user exists, function checks whether salted password matches this given
+	by user during loging time.
+
+	returns user, and this holds user queryset object which is used to authorise user
+	by login_user() function
+
+	BASE: try / except { if / else }
+
+	'''
+
 	try:
 		user = models.User.get(models.User.email == email)
 		if check_password_hash(user.password, password):
@@ -133,6 +183,15 @@ def login_helper(email, password):
 
 @app.route('/login/', methods=['GET','POST'])
 def login():
+
+	''' simple login function that takes parameters from user input. Formm is being 
+	validated, helper fires on third if statement, and if successful then user is get logged,
+	otherwise user gets error 
+
+	BASE: if / else statement
+
+	'''
+
 	login_form = LoginForm(request.form)
 	if request.method == 'POST':
 		if login_form.validate():
@@ -154,6 +213,10 @@ def login():
 		return render_template('login.html', login_form=login_form)
 
 def register_validator(user_name):
+
+	''' simple function thath checks whether user exists already in the db or not.
+	If yes, user gets error, otherwise registration fires '''
+
 	if user_name in models.User.select():
 		return False
 	else:
@@ -161,6 +224,14 @@ def register_validator(user_name):
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
+
+	''' simple register form, with register_validator() helper used to check if
+	inserted data can be accepted by db or not 
+
+	BASE: if / else 
+
+	'''
+
 	register_form = RegisterForm(request.form)
 	if request.method == 'POST':
 		if register_form.validate() and register_validator(request.form['username']):
@@ -182,6 +253,9 @@ def register():
 
 @app.route('/logout/')
 def logout():
+	''' simplest function in this app, just simple uses tools provided by flask_login
+	module to logout user '''
+
 	logout_user()
 	return redirect(url_for('create_album'))
 
