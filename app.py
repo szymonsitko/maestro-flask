@@ -9,7 +9,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = '2sadxaaa4sakcSD'
-app.config['UPLOAD_FOLDER'] = 'home/Documents/programming/python/flask/maestro/media'
+app.config['UPLOAD_FOLDER'] = '/home/simon/Documents/programming/python/flask/maestro/media'
 
 @app.before_request
 def before_request():
@@ -49,9 +49,9 @@ def create_album():
 		add_album_form = CreateAlbum(request.form)
 		if add_album_form.validate():
 			f = request.files['file']
-			f.save(secure_filename(f.filename))
 			file_name = secure_filename(f.filename)
-			print(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+			print(file_name)
+			f.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
 			models.Album.new_album(
 				user=current_user.id, 
 				artist=request.form['artist'], 
@@ -67,7 +67,7 @@ def create_album():
 
 	return render_template('create_album.html')
 
-@app.route
+@app.route('/my_profile/')
 def my_profile():
 	return render_template('my_profile.html')
 
