@@ -20,6 +20,12 @@ def release_date(form, field):
 	if field == str:
 		raise ValidationError('Year given is not number!')
 
+def length_field(form, field):
+	length = field.split(':')
+	print(length[0], length[1])
+	if (length[0] and length[1]) is not True:
+		return ValidationError('Unsupported length format.')
+
 class RegisterForm(Form):
 	username = StringField(
 		'Username',
@@ -59,5 +65,4 @@ class CreateAlbum(Form):
 
 class CreateSong(Form):
 	song_title = StringField('Song title', validators=[DataRequired()])
-	audio_file = StringField('File format', )
 

@@ -3,10 +3,10 @@
 {% block content %}
 
 
-{% if add_album_form %}
+{% if form %}
 
 <form method="POST" action="" class="form" enctype = "multipart/form-data">
-{% for object in add_album_form %} {{ add_album_form.csrf_token }}
+{% for object in form %} {{ form.csrf_token }}
 	
  	{{ object.label }}
  	<br>
@@ -19,6 +19,9 @@
 </form>
 
 {% endif %}
+	
+
+
 
 {% if error_msg %}
 {{ error_msg }}

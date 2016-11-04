@@ -9,4 +9,12 @@ def allowed_song_extensions(filename):
 	else:
 		return True
 
-print(allowed_song_extensions('koparka.html'))
+def length_field(form, field):
+
+	length = field.split(':')
+	print(length[0], length[1])
+	if (length[0] and length[1]) is not True:
+		return ValidationError
+
+
+print(length_field('3:20'))

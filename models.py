@@ -53,22 +53,20 @@ class Song(BaseModel):
     album = ForeignKeyField(Album, related_name='songs')
     song_title = CharField(max_length=250)
     audio_file = CharField(default='')
-    length = CharField(max_length=10)
     is_favorite = BooleanField()
 
     @classmethod
-    def new_song(cls, album, song_title, audio_file, length, is_favorite):
+    def new_song(cls, album, song_title, audio_file, is_favorite=False):
     	cls.create(
     		album=album,
     		song_title=song_title,
     		audio_file=audio_file,
-    		length=length,
-    		is_favorite=False
+    		is_favorite=is_favorite
     		)
 
 def initialize():
 	DATABASE.connect()
-	DATABASE.create_tables([User, Album], safe=True)
+	DATABASE.create_tables([User, Album, Song], safe=True)
 	DATABASE.close()
 
 
