@@ -7,11 +7,12 @@ from werkzeug import secure_filename
 import models
 import os
 
-app = Flask(__name__)
+staticfiles = '/home/simon/Documents/programming/python/flask/maestro/static'
+app = Flask(__name__, static_url_path=staticfiles)
 app.secret_key = '2sadxaaa4sakcSD'
 
 # configuration for different files to upload: image files (media dir) and songs (media/songs)
-app.config['UPLOAD_PICTURES_FOLDER'] = '/home/simon/Documents/programming/python/flask/maestro/media'
+app.config['UPLOAD_PICTURES_FOLDER'] = '/home/simon/Documents/programming/python/flask/maestro/static/media'
 app.config['UPLOAD_SONGS_FOLDER'] = app.config['UPLOAD_PICTURES_FOLDER'] + '/songs/'
 
 # lists with allowed extensions to upload (for function "allowed_files_extensions()")
@@ -88,7 +89,7 @@ def create_album():
 						album_title=request.form['album_title'],
 						release_date=int(request.form['release_date']),
 						genre=request.form['genre'],
-						album_logo=os.path.join(app.config['UPLOAD_PICTURES_FOLDER'], file_name) 
+						album_logo=file_name
 						)
 					return redirect(url_for('my_profile'))
 				else:
@@ -123,7 +124,7 @@ def create_song(album_id):
 					models.Song.new_song(
 						album=album_id,
 						song_title=request.form['song_title'],
-						audio_file=os.path.join(app.config['UPLOAD_PICTURES_FOLDER'], file_name),
+						audio_file=file_name,
 						)
 					return redirect(url_for('my_profile'))
 				else:
@@ -153,8 +154,32 @@ def delete_song(song_id):
 	delete_song.execute()
 	return redirect(url_for('my_profile'))
 
-@app.route('/my_profile/')
+@app.route('/')
 def my_profile():
+
+	''' this is the main page, available to registered users only (since this is the owm media
+	browser). This function lists own albums and songs added previously. As a main view, it is
+	a point of redirection for functions: 
+
+	- create_song, 
+	- create_album, 
+	- login
+	- register*
+
+	*all of those after success/validation.
+
+	If user is not authorised then it is being send to login page.
+
+	BASE: if / else 
+
+	'''
+	if not current_user.is_authenticated:
+		return redirect(url_for('login'))
+	else:
+		user_albums = models.Album.select().where(models.Album.user_id == current_user.id)
+		return render_template('my_profile.html', user_albums=user_albums, staticfiles=staticfiles)
+
+
 	return render_template('my_profile.html')
 
 def login_helper(email, password):

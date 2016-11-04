@@ -3,7 +3,17 @@
 {% block content %}
 
 
+{% for media in user_albums %}
 
+{{ media.album_title }}
+<br>
+{{ media.genre }}
+<br
+{{ media.release_date }}
+<br>
+<img src="{{ staticfiles }}/{{media.album_logo}}">
+
+{% endfor %}
 
 
 
