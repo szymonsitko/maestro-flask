@@ -34,7 +34,7 @@ class Album(BaseModel):
 	album_title = CharField(max_length=500)
 	genre = CharField(max_length=100)
 	album_logo = CharField()
-	release_date = DecimalField()
+	release_date = IntegerField()
 	is_favorite = BooleanField()
 
 	@classmethod

@@ -11,6 +11,9 @@ app = Flask(__name__)
 app.secret_key = '2sadxaaa4sakcSD'
 app.config['UPLOAD_FOLDER'] = '/home/simon/Documents/programming/python/flask/maestro/media'
 
+song_extensions = ['mp3', 'wav', 'oog']
+images_extensions = ['jpg', 'jpeg', 'gif', 'png']
+
 @app.before_request
 def before_request():
 	g.db = models.DATABASE
@@ -32,6 +35,15 @@ def user_loader(userid):
 	except models.DoesNotExist:
 		return None
 
+def allowed_files_extensions(filename, extensions):
+
+	file = filename.split('.')
+	if file[1] not in extensions:
+		return False
+	else:
+		return True
+
+
 @app.route('/create_album/', methods=['GET', 'POST'])
 def create_album():
 
@@ -47,30 +59,46 @@ def create_album():
 	
 	else:
 		add_album_form = CreateAlbum(request.form)
-		if add_album_form.validate():
-			f = request.files['file']
-			file_name = secure_filename(f.filename)
-			print(file_name)
-			f.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-			models.Album.new_album(
-				user=current_user.id, 
-				artist=request.form['artist'], 
-				album_title=request.form['album_title'],
-				release_date=release_date, 
-				genre=request.form['genre'],
-				album_logo=os.path.join(app.config['UPLOAD_FOLDER'], file_name) 
-				)
-			return redirect(url_for('my_profile'))
-		else:
-			return render_template('create_album.html', 
-				add_album_form=add_album_form,
-				error_msg="Cannot upload the file. Please check allowed extensions!")
-	return render_template('create_album.html')
+		if request.method == 'POST':
+			if add_album_form.validate():
+				f = request.files['file']
+				file_name = secure_filename(f.filename)
+				if allowed_files_extensions(file_name, images_extensions):
+					f.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+					models.Album.new_album(
+						user=current_user.id, 
+						artist=request.form['artist'], 
+						album_title=request.form['album_title'],
+						release_date=int(request.form['release_date']),
+						genre=request.form['genre'],
+						album_logo=os.path.join(app.config['UPLOAD_FOLDER'], file_name) 
+						)
+					return redirect(url_for('my_profile'))
+				else:
+					return render_template('create.html', 
+						add_album_form=add_album_form,
+						error_msg="File you are trying to upload is not supported.")
+			else:
+				return render_template('create.html', 
+					add_album_form=add_album_form,
+					error_msg="Cannot upload the file. Please check allowed extensions!")
+	return render_template('create.html', add_album_form=add_album_form)
+
+
+def allowed_song_extensions(filename):
+
+	extensions = ['mp3', 'wav', 'oog']
+
+	file = filename.split('.')
+	if file[1] not in extensions:
+		return False
+	else:
+		return True
 
 
 @app.route('/create_song/')
 def create_song():
-	pass
+	return render_template('create.html')
 
 @app.route('/my_profile/')
 def my_profile():
