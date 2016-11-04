@@ -12,6 +12,8 @@
 {{ media.release_date }}
 <br>
 <img src="{{ staticfiles }}/{{media.album_logo}}">
+<br>
+<a href="{{ url_for('details', media_id=media.id) }}">Details</a>
 
 {% endfor %}
 

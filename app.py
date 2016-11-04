@@ -182,6 +182,10 @@ def my_profile():
 
 	return render_template('my_profile.html')
 
+@app.route('/details/<int:media_id>')
+def details(media_id):
+	return render_template('details.html')
+
 def login_helper(email, password):
 
 	''' in order to clean code and avoid confusion, login helper checks whether:
