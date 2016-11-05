@@ -3,13 +3,11 @@
 {% block content %}
 
 <a href="{{ url_for('create_album') }}">Add new album</a>
-
+<br>
 {% for media in user_albums %}
 
 {{ media.album_title }}
 <br>
-{{ media.genre }}
-<br
 {{ media.release_date }}
 <br>
 <img src="{{ staticfiles }}/media/{{media.album_logo}}">

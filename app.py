@@ -193,13 +193,38 @@ def details(media_id):
 
 	'''
 
-	detailed_albums = models.Album.select().where(models.Album.user == media_id)
-	album_songs = models.Song.select().where(models.Song.album_id == media_id)
+	detailed_albums = models.Album.get(models.Album.id == media_id)
 
-	return render_template('details.html', 
-		album_query=detailed_albums,
-		album_songs=album_songs,
-		staticfiles=staticfiles)
+	try:
+		album_songs = models.Song.get(models.Song.album_id == media_id)
+		return render_template('details.html', 
+			album_query=detailed_albums,
+			album_songs=album_songs,
+			staticfiles=staticfiles,
+			media_id=media_id)
+	except:
+		return render_template('details.html', 
+			album_query=detailed_albums,
+			staticfiles=staticfiles,
+			media_id=media_id,
+			error_msg="You haven't uploaded any songs yet.")
+
+@app.route('/favorite_song/<int:song_id>')
+def favorite_song(song_id):
+
+	''' add_favorite is a typical function seen in many social media sites. It
+	does not return any particular view (just redirects) but just adds boolean = True 
+	for album or song. Depending on condition (True or False) special icon will be displayed,
+
+	Function takes variable with int value that is used for query. '''
+
+	song = models.Song.get(models.Song.id == song_id)
+	if song.is_favorite:
+		return redirect(url_for('details', media_id=song.album_id))
+	else:
+		song.is_favorite = True
+		song.save()
+		return redirect(url_for('details', media_id=song.album_id))
 
 def login_helper(email, password):
 

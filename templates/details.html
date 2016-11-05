@@ -1,49 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
+	
 
-
-{% for media in album_query %}
-
-<h2>{{ media.artist }}</h2>
+<h2>{{ album_query.artist }}</h2>
 <br>
-{{ media.album_title }}
+{{ album_query.album_title }}
 <br>
-{{ media.genre }}
+{{ album_query.genre }}
 <br>
-{{ media.release_date }}
+{{ album_query.release_date }}
 <br>
-<img src="{{ staticfiles }}/media/{{ media.album_logo }}">
+<img src="{{ staticfiles }}/media/{{ album_query.album_logo }}">
 <br>
-<a href="{{ url_for('delete_album', album_id=media.id) }}">Remove this album</a>
-<br>
-<a href="{{ url_for('create_song', album_id=media.id) }}">Add song</a>
+<a href="{{ url_for('delete_album', album_id=album_query.id) }}">Remove this album</a>
 <br>
 
-{% endfor %}
-
 <br>
-{% for song in album_songs %}
 
 
 <br>
-{{ song.song_title }}
+
+{% if album_songs %}
+<br>
+{{ album_songs.song_title }}
 <br>
 <audio controls>
-  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/ogg">
-  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/mpeg">
-  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/mpeg">
+  <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/ogg">
+  <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/mpeg">
+  <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/mpeg">
 Your browser does not support the audio element.
 </audio>
-<a href="{{ url_for('delete_song', song_id=song.id) }}">Remove this song</a>
+<a href="{{ url_for('favorite_song', song_id=album_songs.id) }}">Love this song</a>
+<a href="{{ url_for('delete_song', song_id=album_songs.id) }}">Remove this song</a>
+{% endif %}
 
-{% endfor %}
-
-
-
-
-
-
+{% if error_msg %}
+	{{ error_msg }}
+	{% endif %}
+<br>
+<a href="{{ url_for('create_song', album_id=media_id) }}">Add song</a>
 
 
 
