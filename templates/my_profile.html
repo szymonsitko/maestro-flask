@@ -18,8 +18,9 @@
 	<p>You like it</p>
 	{% else %}
 	<p>You don't like it</p>
+	<a href="{{ url_for('favorite_album', album_id=media.id) }}">Add to favorites</a>
 	{% endif %}
-
+	<br>
 
 {% endfor %}
 

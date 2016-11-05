@@ -209,6 +209,7 @@ def details(media_id):
 			media_id=media_id,
 			error_msg="You haven't uploaded any songs yet.")
 
+
 @app.route('/favorite_song/<int:song_id>')
 def favorite_song(song_id):
 
@@ -225,6 +226,21 @@ def favorite_song(song_id):
 		song.is_favorite = True
 		song.save()
 		return redirect(url_for('details', media_id=song.album_id))
+
+@app.route('/favorite_album/<int:album_id>')
+def favorite_album(album_id):
+
+	''' as described above (see: favorite_song). In this case, function takes 
+	argument but redirects user to my_profile view with no variable passed,
+	so user can see all owned media '''
+
+	album = models.Album.get(models.Album.id == album_id)
+	if album.is_favorite:
+		return redirect(url_for('my_profile'))
+	else:
+		album.is_favorite = True
+		album.save()
+		return redirect(url_for('my_profile'))
 
 def login_helper(email, password):
 
