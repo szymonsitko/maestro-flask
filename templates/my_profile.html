@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<a href="{{ url_for('create_album') }}">Add new album</a>
 
 {% for media in user_albums %}
 
@@ -11,9 +12,16 @@
 <br
 {{ media.release_date }}
 <br>
-<img src="{{ staticfiles }}/{{media.album_logo}}">
+<img src="{{ staticfiles }}/media/{{media.album_logo}}">
 <br>
 <a href="{{ url_for('details', media_id=media.id) }}">Details</a>
+
+	{% if media.is_favorite %}
+	<p>You like it</p>
+	{% else %}
+	<p>You don't like it</p>
+	{% endif %}
+
 
 {% endfor %}
 

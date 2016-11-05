@@ -126,7 +126,7 @@ def create_song(album_id):
 						song_title=request.form['song_title'],
 						audio_file=file_name,
 						)
-					return redirect(url_for('my_profile'))
+					return redirect(url_for('details', media_id=album_id))
 				else:
 					return render_template('create.html', 
 						form=add_song_form,
@@ -184,7 +184,22 @@ def my_profile():
 
 @app.route('/details/<int:media_id>')
 def details(media_id):
-	return render_template('details.html')
+
+	''' details view takes media_id as a paramter paased from my_details view as a 
+	int variable. This var. is needed to create database query to retrieve two objects:
+
+	1. album query 
+	2. songs query (related to relevant album)
+
+	'''
+
+	detailed_albums = models.Album.select().where(models.Album.user == media_id)
+	album_songs = models.Song.select().where(models.Song.album_id == media_id)
+
+	return render_template('details.html', 
+		album_query=detailed_albums,
+		album_songs=album_songs,
+		staticfiles=staticfiles)
 
 def login_helper(email, password):
 
@@ -229,7 +244,7 @@ def login():
 			user_login = login_helper(email, password)
 			if user_login:
 				login_user(user_login)
-				return redirect(url_for('create_album'))
+				return redirect(url_for('my_profile'))
 			else:
 				return render_template('login.html',
 					login_form=login_form,

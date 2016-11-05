@@ -3,9 +3,41 @@
 {% block content %}
 
 
+{% for media in album_query %}
+
+<h2>{{ media.artist }}</h2>
+<br>
+{{ media.album_title }}
+<br>
+{{ media.genre }}
+<br>
+{{ media.release_date }}
+<br>
+<img src="{{ staticfiles }}/media/{{ media.album_logo }}">
+<br>
+<a href="{{ url_for('delete_album', album_id=media.id) }}">Remove this album</a>
+<br>
+<a href="{{ url_for('create_song', album_id=media.id) }}">Add song</a>
+<br>
+
+{% endfor %}
+
+<br>
+{% for song in album_songs %}
 
 
+<br>
+{{ song.song_title }}
+<br>
+<audio controls>
+  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/ogg">
+  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/mpeg">
+  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+<a href="{{ url_for('delete_song', song_id=song.id) }}">Remove this song</a>
 
+{% endfor %}
 
 
 
