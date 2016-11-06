@@ -4,20 +4,21 @@
 
 
 {% if form %}
-
-<form method="POST" action="" class="form" enctype = "multipart/form-data">
-{% for object in form %} {{ form.csrf_token }}
-	
- 	{{ object.label }}
- 	<br>
- 	{{ object }}
- 	<br>
-{% endfor %}
-	<input type = "file" name = "file" />
-	<br>
-	<button type="submit" id="submit">Add!</button>
-</form>
-
+<div class="well well-lg">
+	<form method="POST" action="" class="form" enctype = "multipart/form-data">
+	{% for object in form %} {{ form.csrf_token }}
+		
+	 	{{ object.label }}
+	 	<br>
+	 	{{ object }}
+	 	<br>
+	{% endfor %}
+		<br>
+		<input type = "file" name = "file" />
+		<br>
+		<button type="submit" id="submit">Add!</button>
+	</form>
+</div>
 {% endif %}
 	
 

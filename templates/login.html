@@ -4,37 +4,39 @@
 
 {% if register_form %}
 
-<h2>Please register</h2>
 
-<form method="POST" action="" class="form">
-{% for object in register_form %} {{ register_form.csrf_token }}
-	
- 	{{ object.label }}
- 	<br>
- 	{{ object }}
- 	<br>
-{% endfor %}
-	<br>
-	<button type="submit" id="submit">Register!</button>
-</form>
+<div class="well text-center">
+	<h2>Please register</h2>
 
-{% elif login_form %}
+	<form method="POST" action="" class="form">
+	{% for object in register_form %} {{ register_form.csrf_token }}
+		
+	 	{{ object.label }}
+	 	<br>
+	 	{{ object }}
+	 	<br>
+	{% endfor %}
+		<br>
+		<button type="submit" id="submit">Register!</button>
+	</form>
+</div>
+	{% elif login_form %}
+<div class="well text-center">
+	<h2>Please login</h2>
 
-<h2>Please login</h2>
-
-<form method="POST" action="" class="form">
-{% for object in login_form %} {{ login_form.csrf_token }}
-	
- 	{{ object.label }}
- 	<br>
- 	{{ object }}
- 	<br>
-{% endfor %}
-	<br>
-	<button type="submit" id="submit">Login</button>
-</form>
-
-<h4>If you are not user, <a href="{{ url_for('register') }}">register!</h4></a>
+	<form method="POST" action="" class="form">
+	{% for object in login_form %} {{ login_form.csrf_token }}
+		
+	 	{{ object.label }}
+	 	<br>
+	 	{{ object }}
+	 	<br>
+	{% endfor %}
+		<br>
+		<button type="submit" id="submit">Login</button>
+	</form>
+</div>
+	<button class="btn btn-primary"><a href="{{ url_for('register') }}">Register!</h4></a></button>
 
 {% endif %}
 
