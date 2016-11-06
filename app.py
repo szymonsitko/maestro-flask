@@ -154,7 +154,7 @@ def delete_song(song_id):
 	delete_song.execute()
 	return redirect(url_for('my_profile'))
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def my_profile():
 
 	''' this is the main page, available to registered users only (since this is the owm media
@@ -241,6 +241,31 @@ def favorite_album(album_id):
 		album.is_favorite = True
 		album.save()
 		return redirect(url_for('my_profile'))
+
+@app.route('/search/', methods=['GET', 'POST'])
+def search():
+
+	''' simple search view that returns detail view of item that user is searching for.
+	If criteria fails, view redirects to main view with error message '''
+	if request.method == 'POST':
+		search_quote = request.form['query']
+		try:
+			album = models.Album.get(models.Album.album_title == search_quote)
+			album_query = album.id
+			return redirect(url_for('details', media_id=album_query))
+			
+		except:
+			return render_template('my_profile.html', error_msg="Cannot find album or song with following criteria.")
+	else:
+		return render_template('my_profile.html', error_msg="Cannot find album or song with following criteria.")
+
+
+
+	
+
+	
+
+
 
 def login_helper(email, password):
 

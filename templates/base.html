@@ -34,7 +34,7 @@
     </ul>
 
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li>
+      <!-- <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li> -->
       <li><a href="{{ url_for('register')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
       {% if current_user.is_authenticated %}
       <li><a href="{{ url_for('logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -56,6 +56,11 @@
 </div>
 
 <div class="col-md-5">
+<label>Search:</label>
+<form method="POST" action="/search/" class="form" enctype = "multipart/form-data">{{ csrf_token }}
+    <input class="form-search" type="text" name="query" value="query" placeholder="Search">
+    <button type="submit">Search</button>
+</form>
 <h2>Last items added:</h2>
 <ul>
 	<label>Album</label>
