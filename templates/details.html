@@ -2,28 +2,20 @@
 
 {% block content %}
 	
-
-<h2>{{ album_query.artist }}</h2>
-<br>
-{{ album_query.album_title }}
-<br>
+<h1><strong>{{ album_query.artist }}</strong></h1>
+<h3>{{ album_query.album_title }}</h3>
 {{ album_query.genre }}
 <br>
-{{ album_query.release_date }}
+<p><strong>{{ album_query.release_date }}</strong></p>
 <br>
-<img src="{{ staticfiles }}/media/{{ album_query.album_logo }}">
+<img src="{{ staticfiles }}/media/{{ album_query.album_logo }}" class="img-responsive">
 <br>
-<a href="{{ url_for('delete_album', album_id=album_query.id) }}">Remove this album</a>
-<br>
-
-<br>
-
-
+<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"> </span><a href="{{ url_for('delete_album', album_id=album_query.id) }}"> Remove this album</a></button>
 <br>
 
 {% if album_songs %}
-<br>
-{{ album_songs.song_title }}
+<h4><strong>List of songs: </strong></h4>
+<label>{{ album_songs.song_title }}</label>
 <br>
 <audio controls>
   <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/ogg">
@@ -31,15 +23,15 @@
   <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/mpeg">
 Your browser does not support the audio element.
 </audio>
-<a href="{{ url_for('favorite_song', song_id=album_songs.id) }}">Love this song</a>
-<a href="{{ url_for('delete_song', song_id=album_songs.id) }}">Remove this song</a>
+<button class="btn btn-info pull-right"><a href="{{ url_for('favorite_song', song_id=album_songs.id) }}">Love it!</a></button>
+<button class="btn btn-danger pull-right"><a href="{{ url_for('delete_song', song_id=album_songs.id) }}">Remove</a></button>
 {% endif %}
-
-{% if error_msg %}
-	{{ error_msg }}
+<br>
+	{% if error_msg %}
+		{{ error_msg }}
 	{% endif %}
 <br>
-<a href="{{ url_for('create_song', album_id=media_id) }}">Add song</a>
+<button class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span><a href="{{ url_for('create_song', album_id=media_id) }}"> Add new song</a></button>
 
 
 

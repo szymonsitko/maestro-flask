@@ -2,36 +2,26 @@
 
 {% block content %}
 
-
-		<a href="{{ url_for('create_album') }}">Add new album</a>
-
-
 		{% for media in user_albums %}
 
-		<p>{{ media.album_title }}</p>
-		<p>{{ media.release_date }}</p>
+		<h2><strong>{{ media.album_title }}</strong></h2>
+		<p><strong>{{ media.release_date }}</strong></p>
 		<br>
 		<img src="{{ staticfiles }}/media/{{media.album_logo}}" class="img-rounded img-responsive">
 		<br>
-		<a href="{{ url_for('details', media_id=media.id) }}">Details</a>
+		<button class="btn btn-primary"><a href="{{ url_for('details', media_id=media.id) }}">Details</a></button>
 
 			{% if media.is_favorite %}
-			<p>You like it</p>
+			<p class="btn btn-danger"><span class="glyphicon glyphicon-heart"></span> You love this album</p>
 			{% else %}
-			<p>You don't like it</p>
-			<a href="{{ url_for('favorite_album', album_id=media.id) }}">Add to favorites</a>
+			<button class="btn btn-danger"><span class="glyphicon glyphicon-ok"></span><a href="{{ url_for('favorite_album', album_id=media.id) }}">Add to favorites</a></button>
 			{% endif %}
 			<br>
-
-
 {% endfor %}
 <br>
 {% if error_msg %}
 {{ error_msg }}
 {% endif %}
-
-
-
-
-
+<br>
+<button class="btn btn-info"><a href="{{ url_for('create_album') }}">Add new album</a></button>
 {% endblock content %}

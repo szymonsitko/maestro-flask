@@ -15,6 +15,39 @@
 
 	<!-- bootstrap JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<style type="text/css">
+		
+	body {
+	    background-image: url({{ url_for('static', filename='P4GfA.jpg') }});
+	    background-size: cover;                   
+	    background-repeat: no-repeat;
+	    background-position: center;           
+}
+
+	a {
+		text-decoration: none;
+		color: white;
+		font-weight: 400;
+	}
+
+	a:hover {
+		color: white;
+		text-decoration: none;
+	}
+
+	footer a {
+		color: black;
+	}
+
+	footer a:hover {
+		color: black;
+	}
+
+	footer {
+		padding: 0 20px;
+	}
+
+	</style>
 
 </head>
 <body>
@@ -34,8 +67,10 @@
     </ul>
 
     <ul class="nav navbar-nav navbar-right">
-      <!-- <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li> -->
+      {% if current_user.is_authenticated == False %}
       <li><a href="{{ url_for('register')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      {% endif %}
+
       {% if current_user.is_authenticated %}
       <li><a href="{{ url_for('logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
       {% else %}
@@ -48,32 +83,41 @@
 
 <div class="section col-xs-12 col-sm-12 col-md-12">
 
-<div class="col-md-7">
+	<div class="search-box-main text-center">
+		<br>
+			<label><span class="glyphicon glyphicon-search"></span> Search:</label>
+			<form method="POST" action="/search/" class="form" enctype = "multipart/form-data">{{ csrf_token }}
+	    		<input class="form-search" type="text" name="query" value="" placeholder="Search">
+	    		<button type="submit">Go!</button>
+			</form>
+	</div>
 
-{% block content %}
-{% endblock content %}
+	<div class="col-md-7">
+
+		{% block content %}
+		{% endblock content %}
+		
+
+	</div>
+
+	<div class="col-md-5">
+
+		<h2>Last items added:</h2>
+		<ul>
+			<label>Album</label>
+			<li>one</li>
+			<label>Song</label>
+			<li>two</li>
+		</ul>
+	</div>
 
 </div>
-
-<div class="col-md-5">
-<label>Search:</label>
-<form method="POST" action="/search/" class="form" enctype = "multipart/form-data">{{ csrf_token }}
-    <input class="form-search" type="text" name="query" value="query" placeholder="Search">
-    <button type="submit">Search</button>
-</form>
-<h2>Last items added:</h2>
-<ul>
-	<label>Album</label>
-	<li>one</li>
-	<label>Song</label>
-	<li>two</li>
-</ul>
 </div>
 
-</div>
-
+<br>
+<br>
 <footer>
-	<center><p> <strong>Maestro Music Browser</strong> <br><small>&copy; <a href="mailto:szymon.sitko@onet.eu">Szymon Sitko</a></small> </p></center>
+	<center><p> <strong>Maestro Music Browser</strong> <br><small>&copy; <strong><a href="mailto:szymon.sitko@onet.eu">Szymon Sitko</a></strong></small> </p></center>
 </footer> 
 
 </div>

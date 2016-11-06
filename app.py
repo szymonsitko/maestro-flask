@@ -253,18 +253,11 @@ def search():
 			album = models.Album.get(models.Album.album_title == search_quote)
 			album_query = album.id
 			return redirect(url_for('details', media_id=album_query))
-			
+
 		except:
 			return render_template('my_profile.html', error_msg="Cannot find album or song with following criteria.")
 	else:
 		return render_template('my_profile.html', error_msg="Cannot find album or song with following criteria.")
-
-
-
-	
-
-	
-
 
 
 def login_helper(email, password):
