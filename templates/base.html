@@ -19,7 +19,7 @@
 		
 	body {
 	    background-image: url({{ url_for('static', filename='P4GfA.jpg') }});
-	    background-size: cover;                   
+	    background-size: cover;                  
 	    background-repeat: no-repeat;
 	    background-position: center;           
 }
@@ -46,6 +46,11 @@
 	footer {
 		padding: 0 20px;
 	}
+
+	.navbar-header .navbar-brand {
+		color: #FAEAE8;
+	}
+
 
 	</style>
 
@@ -80,36 +85,40 @@
   </div>
 </nav>
 
-
-<div class="section col-xs-12 col-sm-12 col-md-12">
-
+<div class="col-xs-12 col-md-8">
 	<div class="search-box-main text-center">
 		<br>
 			<label><span class="glyphicon glyphicon-search"></span> Search:</label>
 			<form method="POST" action="/search/" class="form" enctype = "multipart/form-data">{{ csrf_token }}
 	    		<input class="form-search" type="text" name="query" value="" placeholder="Search">
 	    		<button type="submit">Go!</button>
+	    		<br>
+				<br>
 			</form>
 	</div>
+</div>
+
 
 	<div class="col-md-7">
 
 		{% block content %}
 		{% endblock content %}
-		
-
+		<br>
+		<br>
 	</div>
 
 	<div class="col-md-5">
-
+		
 		<h2>Last items added:</h2>
 		<ul>
-			<label>Album</label>
-			<li>one</li>
-			<label>Song</label>
-			<li>two</li>
+			<label>Album details: </label>
+			<li id="last-album-added"></li>
+			<br>
+			<label>Song details: </label>
+			<li id="last-song-added"></li>
 		</ul>
 	</div>
+
 
 </div>
 </div>
@@ -121,8 +130,8 @@
 </footer> 
 
 </div>
-
-
+	<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>

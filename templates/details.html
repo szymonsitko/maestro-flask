@@ -10,28 +10,35 @@
 <br>
 <img src="{{ staticfiles }}/media/{{ album_query.album_logo }}" class="img-responsive">
 <br>
-<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"> </span><a href="{{ url_for('delete_album', album_id=album_query.id) }}"> Remove this album</a></button>
+<a href="{{ url_for('delete_album', album_id=album_query.id) }}"><button class="btn btn-danger"><span class="glyphicon glyphicon-remove"> </span> Remove this album</button></a>
 <br>
 
 {% if album_songs %}
 <h4><strong>List of songs: </strong></h4>
-<label>{{ album_songs.song_title }}</label>
+
+{% for song in album_songs %}
+
+<label>{{ song.song_title }}</label>
+
 <br>
 <audio controls>
-  <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/ogg">
-  <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/mpeg">
-  <source src="{{ staticfiles }}/media/songs/{{ album_songs.audio_file }}" type="audio/mpeg">
+  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/ogg">
+  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/mpeg">
+  <source src="{{ staticfiles }}/media/songs/{{ song.audio_file }}" type="audio/mpeg">
 Your browser does not support the audio element.
 </audio>
-<button class="btn btn-info pull-right"><a href="{{ url_for('favorite_song', song_id=album_songs.id) }}">Love it!</a></button>
-<button class="btn btn-danger pull-right"><a href="{{ url_for('delete_song', song_id=album_songs.id) }}">Remove</a></button>
+<a href="{{ url_for('favorite_song', song_id=song.id) }}"><button class="btn btn-info pull-right">Love it!</button></a>
+<a href="{{ url_for('delete_song', song_id=song.id) }}"><button class="btn btn-danger pull-right">Remove</button></a>
+
+<br>
+
+{% endfor %}
+<br>
+<a href="{{ url_for('create_song', album_id=media_id) }}"><button class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span> Add another song</button></a>
+{% else %}
+<br>
+<a href="{{ url_for('create_song', album_id=media_id) }}"><button class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span> Add first song</button></a>
 {% endif %}
-<br>
-	{% if error_msg %}
-		{{ error_msg }}
-	{% endif %}
-<br>
-<button class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span><a href="{{ url_for('create_song', album_id=media_id) }}"> Add new song</a></button>
 
 
 

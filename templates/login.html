@@ -8,7 +8,7 @@
 <div class="well text-center">
 	<h2>Please register</h2>
 
-	<form method="POST" action="" class="form">
+	<form method="POST" action="" class="form" enctype = "multipart/form-data">
 	{% for object in register_form %} {{ register_form.csrf_token }}
 		
 	 	{{ object.label }}
@@ -24,7 +24,7 @@
 <div class="well text-center">
 	<h2>Please login</h2>
 
-	<form method="POST" action="" class="form">
+	<form method="POST" action="" class="form" enctype = "multipart/form-data">
 	{% for object in login_form %} {{ login_form.csrf_token }}
 		
 	 	{{ object.label }}
@@ -36,7 +36,7 @@
 		<button type="submit" id="submit">Login</button>
 	</form>
 </div>
-	<button class="btn btn-primary"><a href="{{ url_for('register') }}">Register!</h4></a></button>
+	<a href="{{ url_for('register') }}"><button class="btn btn-primary">Register!</button></a>
 
 {% endif %}
 

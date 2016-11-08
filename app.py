@@ -3,6 +3,8 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_bcrypt import check_password_hash, generate_password_hash
 from forms import RegisterForm, LoginForm, CreateAlbum, CreateSong
 from werkzeug import secure_filename
+from flask_peewee.rest import RestAPI, RestResource
+from models import User, Album, Song
 
 import models
 import os
@@ -10,6 +12,22 @@ import os
 staticfiles = '/home/simon/Documents/programming/python/flask/maestro/static'
 app = Flask(__name__, static_url_path=staticfiles)
 app.secret_key = '2sadxaaa4sakcSD'
+
+# API CONFIGURATION
+api = RestAPI(app)
+
+# REGISTERING MODELS 
+
+class UserResource(RestResource):
+    exclude = ('password', 'email',)
+
+
+api.register(User ,UserResource)
+api.register(Album)
+api.register(Song)
+
+# FINAL API SETUP
+api.setup()
 
 # configuration for different files to upload: image files (media dir) and songs (media/songs)
 app.config['UPLOAD_PICTURES_FOLDER'] = '/home/simon/Documents/programming/python/flask/maestro/static/media'
@@ -54,6 +72,7 @@ def allowed_files_extensions(filename, extensions):
 	extensions provided (above in this case) '''
 
 	file = filename.split('.')
+	print(file[1])
 	if file[1] not in extensions:
 		return False
 	else:
@@ -196,7 +215,7 @@ def details(media_id):
 	detailed_albums = models.Album.get(models.Album.id == media_id)
 
 	try:
-		album_songs = models.Song.get(models.Song.album_id == media_id)
+		album_songs = models.Song.select().where(models.Song.album_id == media_id)
 		return render_template('details.html', 
 			album_query=detailed_albums,
 			album_songs=album_songs,
@@ -206,8 +225,7 @@ def details(media_id):
 		return render_template('details.html', 
 			album_query=detailed_albums,
 			staticfiles=staticfiles,
-			media_id=media_id,
-			error_msg="You haven't uploaded any songs yet.")
+			media_id=media_id,)
 
 
 @app.route('/favorite_song/<int:song_id>')
@@ -348,9 +366,9 @@ def register():
 				)
 			user_login = models.User.get(models.User.username == user)
 			login_user(user_login)
-			return redirect(url_for('create_album'))
+			return redirect(url_for('my_profile'))
 		else:
-			return render_template('login.html', error_msg="Wrong details provided. Try again.")
+			return render_template('login.html', register_form=register_form, error_msg="Wrong details provided. Try again.")
 	else:
 		return render_template('login.html', register_form=register_form)
 
