@@ -17,8 +17,13 @@ def email_exists(form, field):
         raise ValidationError('User with that email already exists.')
 
 def release_date(form, field):
-	if field == str:
-		raise ValidationError('Year given is not number!')
+	try:
+		if field != str and field > 0:
+			return True
+		else:
+			return False
+	except:
+		raise ValidationError('User must provide a number-type value.')
 
 def length_field(form, field):
 	length = field.split(':')

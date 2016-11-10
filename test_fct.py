@@ -17,4 +17,13 @@ def length_field(form, field):
 		return ValidationError
 
 
-print(length_field('3:20'))
+def release_date(field):
+	try:
+		if field != str and field > 0:
+			return True
+		else:
+			return False
+	except:
+		raise ValueError('User must provide a number-type value.')
+
+print(release_date(5))

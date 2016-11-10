@@ -51,7 +51,6 @@
 		color: #FAEAE8;
 	}
 
-
 	</style>
 
 </head>
@@ -85,7 +84,7 @@
   </div>
 </nav>
 
-<div class="col-xs-12 col-md-8">
+
 	<div class="search-box-main text-center">
 		<br>
 			<label><span class="glyphicon glyphicon-search"></span> Search:</label>
@@ -96,7 +95,7 @@
 				<br>
 			</form>
 	</div>
-</div>
+
 
 
 	<div class="col-md-7">
@@ -109,6 +108,8 @@
 
 	<div class="col-md-5">
 		
+		{% if current_user.is_authenticated %}
+
 		<h2>Last items added:</h2>
 		<ul>
 			<label>Album details: </label>
@@ -116,6 +117,15 @@
 			<br>
 			<label>Song details: </label>
 			<li id="last-song-added"></li>
+		</ul>
+		{% else %}
+		<ul>
+			<label>Hello guest. By signing-in:</label>
+			<li>You will be able to add songs to your library</li>
+			<li>Check what has been added recently</li>
+			<li>And that's all for free!</li>
+			<li><button class="btn btn-info"><a href="{{ url_for('register') }}">Sign-in</a></button></li>
+		{% endif %}
 		</ul>
 	</div>
 

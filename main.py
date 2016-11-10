@@ -10,8 +10,8 @@ import models
 import os
 
 staticfiles = '/home/simon/Documents/programming/python/flask/maestro/static'
-app = Flask(__name__, static_url_path=staticfiles)
-app.secret_key = '2sadxaaa4sakcSD'
+application = Flask(__name__, static_url_path=staticfiles)
+application.secret_key = '2sadxaaa4sakcSD'
 
 # API CONFIGURATION
 api = RestAPI(app)
@@ -71,14 +71,12 @@ def allowed_files_extensions(filename, extensions):
 	Requires two parameters: secure filename (look: werzkeug docs) and list of
 	extensions provided (above in this case) '''
 
-	try:
-		file = filename.split('.')
-		if file[1] not in extensions:
-			return False
-		else:
-			return True
-	except:
+	file = filename.split('.')
+	print(file[1])
+	if file[1] not in extensions:
 		return False
+	else:
+		return True
 
 
 @app.route('/create_album/', methods=['GET', 'POST'])
@@ -385,5 +383,5 @@ def logout():
 
 if __name__ == "__main__":
 	models.initialize()
-	app.debug = True
-	app.run(host='127.0.0.1', port=8000)
+	application.debug = True
+	application.run(host='0.0.0.0')
