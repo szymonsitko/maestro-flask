@@ -1,0 +1,22 @@
+09/11/2016 log
+
+BUGS //
+
+1. file extension helper produces internal server error - OK
+2. release date helper has to be improved (to take only integers) - OK
+
+IMPROVEMENTS //
+
+3. fix search form on main site - OK
+4. list of api's should be unavailable for not logged users - OK
+..
+
+10/11/2016 log
+
+TO DO / ISSUES //
+
+1. image sizing on my-display could be changed (smaller) -
+2. Link to details in api items list
+3. Make buttons and other icons responsive (also music playing bar), all bootstrap formatting fix (!)
+4. like song button needs to dissapear when clicked and star needs to be displayed -
+/..
