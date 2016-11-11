@@ -4,8 +4,6 @@
 
 Simple app made in Flask framework that allows to register user and browse/play own music from music library.
 
-![Alt text](http://i1320.photobucket.com/albums/u528/szymonsitko/fullscr1_zpsvruhcdnq.png?raw=true "Maestro app")
-
 ![Alt text](http://i1320.photobucket.com/albums/u528/szymonsitko/fullscr2_zpsqdcpyhto.png?raw=true "Maestro app")
 
 # Summary
